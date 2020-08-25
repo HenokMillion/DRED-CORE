@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 // set up a mongoose model
-export const User = mongoose.model('User', new Schema({
+module.exports = mongoose.model('User', new Schema({
     id: String,
     patientID: String,
     firstName: String,
