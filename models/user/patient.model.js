@@ -1,0 +1,18 @@
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+
+// set up a mongoose model
+export const User = mongoose.model('User', new Schema({
+    id: String,
+    patientID: String,
+    firstName: String,
+    lastName: String,
+    birthDate: String,
+    profilePicPath: String,
+    phone: String,
+    fileNumber: String,
+    appointments: Array,
+    diagnoses: Array,
+    status: Number,
+    lastDiagnosed: Date
+}))
