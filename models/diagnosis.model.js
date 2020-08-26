@@ -10,5 +10,5 @@ module.exports = mongoose.model('Diagnosis', new Schema({
     patientId: String,
     diagnosis_date: Date,
     label: Number,
-    comment: String
+    comment: Array
 }))
