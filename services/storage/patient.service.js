@@ -1,7 +1,6 @@
 const Patient = require('../../models/user/patient.model')
 const mongoose = require('mongoose')
 
-
 export const editRecord = (id, info) => {
     return new Promise((succeed, fail) => {
         Patient.findByIdAndUpdate(id, info, (err, res) => {
@@ -19,7 +18,6 @@ export const editRecord = (id, info) => {
         })
     })
 }
-
 
 export const deleteRecord = (id, meta) => {
     meta['diagnoses'] = []
@@ -52,6 +50,40 @@ export const generateHistory = (id) => {
                 succeed({
                     success: true,
                     data: res.diagnoses
+                })
+            }
+        })
+    })
+}
+
+export const registerPatient = (patient) => {
+    return new Promise((succeed, fail) => {
+        Patient.create(patient)
+            .then(data => succeed({
+                success: true,
+                data: data
+            }))
+            .catch(err => fail({
+                success: false,
+                error: err
+            }))
+    })
+}
+
+export const saveDiagnosis = (id, diagnosis) => {
+    return new Promise((succeed, fail) => {
+        Patient.findByIdAndUpdate(id, {
+            $push: { diagnoses: diagnosis }
+        }, (err, res) => {
+            if (err) {
+                fail({
+                    success: false,
+                    error: err
+                })
+            } else {
+                succeed({
+                    success: true,
+                    data: res
                 })
             }
         })

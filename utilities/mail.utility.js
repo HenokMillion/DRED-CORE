@@ -16,3 +16,7 @@ export const sendReport = (data) => {
         attachements: data.attachements
     })
 }
+
+export const notifyPatient = (data) => {
+    
+}
