@@ -1,4 +1,3 @@
 const userService = require('../services/storage/user.service')
-
-
-// doctor
+const doctorService = require('../services/storage/doctor.service')
+const patientService = require('../services/storage/patient.service')
