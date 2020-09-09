@@ -44,3 +44,18 @@ export const changePassword = async (email = null, username = null, oldPassword,
         }
     })
 }
+
+// might not be in the document(s)
+export const registerDoctor = (doctor) => {
+    return new Promise((succeed, fail) => {
+        Doctor.create(doctor)
+            .then(data => succeed({
+                success: true,
+                data: data
+            }))
+            .catch(err => fail({
+                success: false,
+                error: err
+            }))
+    })
+}
