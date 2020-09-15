@@ -52,7 +52,7 @@ module.exports.registerPatient = (req, res, next) => {
 }
 
 module.exports.generateHistory = (req, res, next) => {
-    const { patientId } = req.body
+    const { patientId } = req.params
     const valid = !!patientId
     if (!valid) {
         return res.status(400).json({
