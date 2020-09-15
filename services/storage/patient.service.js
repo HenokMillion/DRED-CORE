@@ -101,6 +101,8 @@ module.exports.getPatient = (patientId) => {
                 })
             } else {
                 delete res.password
+                delete res._id
+                delete res.__v
                 succeed({
                     success: true,
                     data: res
