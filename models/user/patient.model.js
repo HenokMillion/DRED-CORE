@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 // set up a mongoose model
 module.exports = mongoose.model('Patient', new Schema({
     id: String,
-    patientID: String,
+    patientId: String,
     firstName: String,
     lastName: String,
     birthDate: String,

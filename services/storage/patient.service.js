@@ -1,9 +1,9 @@
 const Patient = require('../../models/user/patient.model')
 const mongoose = require('mongoose')
 
-export const editRecord = (id, info) => {
+export const editRecord = (patientId, info) => {
     return new Promise((succeed, fail) => {
-        Patient.findByIdAndUpdate(id, info, (err, res) => {
+        Patient.findOneAndUpdate({ patientId: patientId }, info, (err, res) => {
             if (err) {
                 fail({
                     success: false,
@@ -19,28 +19,29 @@ export const editRecord = (id, info) => {
     })
 }
 
-export const deleteRecord = (id, meta) => {
+export const deleteRecord = (patientId, meta) => {
     meta['diagnoses'] = []
     return new Promise((succeed, fail) => {
-        Patient.findByIdAndUpdate(id, meta, (err, res) => {
-            if (err) {
-                fail({
-                    success: false,
-                    error: err
-                })
-            } else {
-                succeed({
-                    success: true,
-                    data: res
-                })
-            }
-        })
+        Patient.findOneAndUpdate({ patientId: patientId },
+            meta, (err, res) => {
+                if (err) {
+                    fail({
+                        success: false,
+                        error: err
+                    })
+                } else {
+                    succeed({
+                        success: true,
+                        data: res
+                    })
+                }
+            })
     })
 }
 
-export const generateHistory = (id) => {
+export const generateHistory = (patientId) => {
     return new Promise((succeed, fail) => {
-        Patient.findById(id, (err, res) => {
+        Patient.findOne({ patientId: patientId }, (err, res) => {
             if (err) {
                 fail({
                     success: failse,
@@ -70,9 +71,9 @@ export const registerPatient = (patient) => {
     })
 }
 
-export const saveDiagnosis = (id, diagnosis) => {
+export const saveDiagnosis = (patientId, diagnosis) => {
     return new Promise((succeed, fail) => {
-        Patient.findByIdAndUpdate(id, {
+        Patient.findOneAndUpdate({ patientId: patientId }, {
             $push: { diagnoses: diagnosis }
         }, (err, res) => {
             if (err) {
@@ -81,6 +82,25 @@ export const saveDiagnosis = (id, diagnosis) => {
                     error: err
                 })
             } else {
+                succeed({
+                    success: true,
+                    data: res
+                })
+            }
+        })
+    })
+}
+
+export const getPatient = (patientId) => {
+    return new Promise((succeed, fail) => {
+        Patient.findOne({ patientId: patientId }, (err, res) => {
+            if (err) {
+                fail({
+                    success: failse,
+                    error: err
+                })
+            } else {
+                delete res.password
                 succeed({
                     success: true,
                     data: res
