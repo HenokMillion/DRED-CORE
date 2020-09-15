@@ -1,6 +1,8 @@
 /* eslint consistent-return:0 import/order:0 */
 
 const express = require('express');
+const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
 const logger = require('./logger');
 
 const argv = require('./argv');
@@ -12,7 +14,7 @@ const ngrok =
   (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel
     ? require('ngrok')
     : false;
-const { resolve } = require('path');
+    const { resolve } = require('path');
 const app = express();
 
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
@@ -36,6 +38,34 @@ const prettyHost = customHost || 'localhost';
 //   res.set('Content-Encoding', 'gzip');
 //   next();
 // });
+
+let dbOptions = { 
+  autoReconnect: true, 
+  useMongoClient: true,
+  connectTimeoutMS: 9000
+}
+const connect = () => {
+  mongoose.connect('mongodb://localhost:27017/DRED', dbOptions)
+}
+mongoose.connect('mongodb://localhost:27017/DRED', dbOptions)
+mongoose.connection.on('disconnected', () => {
+  connect();
+})
+
+mongoose.connection.on('connected', () => {
+  console.log('connected to database')
+})
+
+mongoose.connection.on('connecting', () => {
+  console.log('connecting to database...')
+})
+
+mongoose.connection.on('reconnected', () => {
+  console.log('reconnected to database')
+})
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use('/api', routes)
 app.all('**', (req, res, next) => {

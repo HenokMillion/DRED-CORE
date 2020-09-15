@@ -1,7 +1,7 @@
 const Patient = require('../../models/user/patient.model')
 const mongoose = require('mongoose')
 
-export const editRecord = (patientId, info) => {
+module.exports.editRecord = (patientId, info) => {
     return new Promise((succeed, fail) => {
         Patient.findOneAndUpdate({ patientId: patientId }, info, (err, res) => {
             if (err) {
@@ -19,7 +19,7 @@ export const editRecord = (patientId, info) => {
     })
 }
 
-export const deleteRecord = (patientId, meta) => {
+module.exports.deleteRecord = (patientId, meta) => {
     meta['diagnoses'] = []
     return new Promise((succeed, fail) => {
         Patient.findOneAndUpdate({ patientId: patientId },
@@ -39,7 +39,7 @@ export const deleteRecord = (patientId, meta) => {
     })
 }
 
-export const generateHistory = (patientId) => {
+module.exports.generateHistory = (patientId) => {
     return new Promise((succeed, fail) => {
         Patient.findOne({ patientId: patientId }, (err, res) => {
             if (err) {
@@ -57,7 +57,7 @@ export const generateHistory = (patientId) => {
     })
 }
 
-export const registerPatient = (patient) => {
+module.exports.registerPatient = (patient) => {
     return new Promise((succeed, fail) => {
         Patient.create(patient)
             .then(data => succeed({
@@ -71,7 +71,7 @@ export const registerPatient = (patient) => {
     })
 }
 
-export const saveDiagnosis = (patientId, diagnosis) => {
+module.exports.saveDiagnosis = (patientId, diagnosis) => {
     return new Promise((succeed, fail) => {
         Patient.findOneAndUpdate({ patientId: patientId }, {
             $push: { diagnoses: diagnosis }
@@ -91,7 +91,7 @@ export const saveDiagnosis = (patientId, diagnosis) => {
     })
 }
 
-export const getPatient = (patientId) => {
+module.exports.getPatient = (patientId) => {
     return new Promise((succeed, fail) => {
         Patient.findOne({ patientId: patientId }, (err, res) => {
             if (err) {

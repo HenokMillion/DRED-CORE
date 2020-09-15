@@ -10,8 +10,8 @@ module.exports.getPatient = (req, res, next) => {
         })
     }
     patientService.getPatient(patientId)
-        .then(resp => res.status(resp.status).json(resp))
-        .catch(err => res.status(err.status).json(err))
+        .then(resp => res.status(200).json(resp))
+        .catch(err => res.status(500).json(err))
 }
 
 module.exports.registerPatient = (req, res, next) => {
@@ -47,8 +47,8 @@ module.exports.registerPatient = (req, res, next) => {
         'address': address.trim(),
         'fileNumber': fileNumber
     })
-        .then(resp => res.status(resp.status).json(resp))
-        .catch(err => res.status(err.status).json(err))
+        .then(resp => res.status(200).json(resp))
+        .catch(err => res.status(500).json(err))
 }
 
 module.exports.generateHistory = (req, res, next) => {
@@ -62,8 +62,8 @@ module.exports.generateHistory = (req, res, next) => {
         })
     }
     patientService.generateHistory(patientId)
-        .then(resp => res.status(resp.status).json(resp))
-        .catch(err => res.status(err.status).json(err))
+        .then(resp => res.status(200).json(resp))
+        .catch(err => res.status(500).json(err))
 }
 
 module.exports.saveDiagnosis = (req, res, next) => {
@@ -78,8 +78,8 @@ module.exports.saveDiagnosis = (req, res, next) => {
         })
     }
     patientService.saveDiagnosis(patientId, diagnosis)
-        .then(resp => res.status(resp.status).json(resp))
-        .catch(err => res.status(err.status).json(err))
+        .then(resp => res.status(200).json(resp))
+        .catch(err => res.status(500).json(err))
 }
 
 module.exports.editRecord = (req, res, next) => {
@@ -94,8 +94,8 @@ module.exports.editRecord = (req, res, next) => {
         })
     }
     patientService.editRecord(patientId, info)
-        .then(resp => res.status(resp.status).json(resp))
-        .catch(err => res.status(err.status).json(err))
+        .then(resp => res.status(200).json(resp))
+        .catch(err => res.status(500).json(err))
 }
 
 module.exports.deleteRecord = (req, res, next) => {
@@ -110,7 +110,7 @@ module.exports.deleteRecord = (req, res, next) => {
         })
     }
     patientService.deleteRecord(patientId, meta)
-        .then(resp => res.status(resp.status).json(resp))
-        .catch(err => res.status(err.status).json(err))
+        .then(resp => res.status(200).json(resp))
+        .catch(err => res.status(500).json(err))
 }
 
