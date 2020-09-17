@@ -1,8 +1,7 @@
 const Appointment = require('../../models/appointment.model')
 const mongoose = require('mongoose')
 
-
-export const showCalendar = (doctorId, patientId) => {
+module.exports.showCalendar = (doctorId, patientId) => {
     return new Promise((succeed, fail) => {
         Appointment.find({
             doctorId: doctorId,
@@ -10,15 +9,17 @@ export const showCalendar = (doctorId, patientId) => {
         })
         .then(data => succeed({
             success: true,
+            status: 200,
             data: data
         }))
         .catch(err => fail({
+            status: 500,
             success: false,
             error: err
         }))    })
 }
 
-export const createAppointment = (doctorId, patientId, appointmentDate) => {
+module.exports.createAppointment = (doctorId, patientId, appointmentDate) => {
     return new Promise((succeed, fail) => {
         Appointment.create({
             doctorId: doctorId,
@@ -27,25 +28,29 @@ export const createAppointment = (doctorId, patientId, appointmentDate) => {
         })
             .then(data => succeed({
                 success: true,
-                data: data
+                data: data,
+                status: 201
             }))
             .catch(err => fail({
+                status: 500,
                 success: false,
                 error: err
             }))
     })
 }
 
-export const editAppointment = (appointmentId, newAppointment) => {
+module.exports.editAppointment = (appointmentId, newAppointment) => {
     return new Promise((succeed, fail) => {
         Appointment.findByIdAndUpdate(appointmentId, newAppointment, (err, res) => {
             if (err) {
                 fail({
+                    status: 500,
                     success: false,
                     error: err
                 })
             } else {
                 succeed({
+                    status: 200,
                     success: true,
                     data: res
                 })
@@ -54,16 +59,18 @@ export const editAppointment = (appointmentId, newAppointment) => {
     })
 }
 
-export const deleteAppointment = (appointmentId) => {
+module.exports.deleteAppointment = (appointmentId) => {
     return new Promise((succeed, fail) => {
         Appointment.findByIdAndRemove(id, (err, res) => {
             if (err) {
                 fail({
+                    status: 500,
                     success: false,
                     error: err
                 })
             } else {
                 succeed({
+                    status: 200,
                     success: true,
                     data: res
                 })

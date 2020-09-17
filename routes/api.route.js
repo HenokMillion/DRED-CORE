@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const patientController = require('../controllers/patient.controller')
+const appointmentController = require('../controllers/appointment.controller')
 
 router.route('/patient/:patientId')
     .get(patientController.getPatient)
@@ -14,5 +15,15 @@ router.route('/patient/:patientId/edit')
 router.route('/patient/:patientId/delete')
     .post(patientController.deleteRecord)
 
+
+
+router.route('/appointment/calendar/:doctorId/:patientId')
+    .get(appointmentController.showCalendar)
+router.route('/appointment/new')
+    .post(appointmentController.createAppointment)
+router.route('/appointment/edit/:appointmentId')
+    .put(appointmentController.editAppointment)
+router.route('/appointment/delete/:appointmentId')
+    .delete(appointmentController.deleteAppointment)
 
 module.exports = router

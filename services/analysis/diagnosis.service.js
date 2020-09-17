@@ -1,9 +1,7 @@
 const Diagnosis = require('../../models/diagnosis.model')
 const mongoose = require('mongoose')
 
-
 export const diagnose = (imagePath) => {
-
 }
 
 export const saveDiagnosis = (diagnosis) => {
