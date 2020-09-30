@@ -40,9 +40,9 @@ const prettyHost = customHost || 'localhost';
 // });
 
 let dbOptions = { 
-  autoReconnect: true, 
-  useMongoClient: true,
-  connectTimeoutMS: 9000
+  connectTimeoutMS: 9000,
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 }
 const connect = () => {
   mongoose.connect('mongodb://localhost:27017/DRED', dbOptions)

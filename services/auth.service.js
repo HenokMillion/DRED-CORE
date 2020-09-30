@@ -3,8 +3,8 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-export const authUser = async (email = null, password = null, username = null) => {
-    return new Promise((succeed, fail) => {
+module.exports.authUser = (email = null, password = null, username = null) => {
+    return new Promise(async (succeed, fail) => {
         const doctor = await Doctor.findOne({ $or: [{ 'email': email }, { 'username': username }] })
         if (doctor) {
             const isPassworCorrect = bcrypt.compareSync(password, doctor.password)
@@ -21,6 +21,7 @@ export const authUser = async (email = null, password = null, username = null) =
                     patients: doctor.patients
                 })
                 succeed({
+                    status: 200,
                     success: true,
                     data: token
                 })

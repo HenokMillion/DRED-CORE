@@ -1,33 +1,44 @@
 const Diagnosis = require('../../models/diagnosis.model')
 const mongoose = require('mongoose')
 
-export const diagnose = (imagePath) => {
+module.exports.diagnose = (imagePath) => {
 }
 
-export const saveDiagnosis = (diagnosis) => {
+module.exports.saveDiagnosis = (diagnosis) => {
     return new Promise((succeed, fail) => {
         Diagnosis.create(diagnosis)
         .then(data => succeed({
+            status: 200,
             success: true,
             data: data
         }))
         .catch(err => fail({
+            status: 500,
             success: false,
             error: err
         }))
     })
 }
 
-export const editDiagnosis = (id, diagnosis) => {
+module.exports.editDiagnosis = (id, diagnosis) => {
     return new Promise((succeed, fail) => {
         Diagnosis.findByIdAndUpdate(id, diagnosis, (err, res) => {
             if (err) {
                 fail({
+                    status: 500,
                     success: false,
                     error: err
                 })
             } else {
+                if (!res) {
+                    return fail({
+                        status: 500,
+                        success: false,
+                        error: 'diagnosis not found'
+                    })  
+                }
                 succeed({
+                    status: 200,
                     success: true,
                     data: res
                 })
@@ -36,18 +47,27 @@ export const editDiagnosis = (id, diagnosis) => {
     })
 }
 
-export const deleteDiagnosis = (id) => {
+module.exports.deleteDiagnosis = (id) => {
     return new Promise((succeed, fail) => {
-        patientModel.findByIdAndRemove(id, (err, res) => {
+        Diagnosis.findByIdAndRemove(id, (err, data) => {
             if (err) {
                 fail({
+                    status: 500,
                     success: false,
                     error: err
                 })
             } else {
+                if (!data) {
+                    return fail({
+                        status: 500,
+                        success: false,
+                        error: 'diagnosis not found'
+                    }) 
+                }
                 succeed({
+                    status: 200,
                     success: true,
-                    data: res
+                    data: 'successfully removed diagnosis record'
                 })
             }
         })

@@ -2,17 +2,18 @@ const Doctor = require('../../models/user/doctor.model')
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
-
-export const editInfo = (id, info) => {
+module.exports.editInfo = (id, info) => {
     return new Promise((succeed, fail) => {
         Doctor.findByIdAndUpdate(id, info, (err, res) => {
             if (err) {
                 fail({
+                    status: 500,
                     success: false,
                     error: err
                 })
             } else {
                 succeed({
+                    status: 200,
                     success: true,
                     data: res
                 })
@@ -21,10 +22,11 @@ export const editInfo = (id, info) => {
     })
 }
 
-export const changePassword = async (email = null, username = null, oldPassword, newPassword) => {
-    return new Promise((succeed, fail) => {
+module.exports.changePassword = (email = null, username = null, oldPassword, newPassword) => {
+    return new Promise(async (succeed, fail) => {
         const doctor = await Doctor.findOne({ $or: [{ email: email }, { username: username }] })
         if (doctor) {
+            console.log(doctor)
             const isPassworCorrect = bcrypt.compareSync(oldPassword, doctor.password)
             if (isPassworCorrect) {
                 doctor.update({
@@ -33,7 +35,7 @@ export const changePassword = async (email = null, username = null, oldPassword,
                     if (err) {
                         fail({ status: 500, success: false, error: "Something went wrong" })
                     } else {
-                        succeed({ status: 201, success: true, data: res })
+                        succeed({ status: 201, success: true, data: 'Password changed successfully' })
                     }
                 })
             } else {
@@ -46,14 +48,19 @@ export const changePassword = async (email = null, username = null, oldPassword,
 }
 
 // might not be in the document(s)
-export const registerDoctor = (doctor) => {
+module.exports.registerDoctor = (doctor) => {
+    if (doctor.password) {
+        doctor.password = bcrypt.hashSync(doctor.password, bcrypt.genSaltSync(10))
+    }
     return new Promise((succeed, fail) => {
         Doctor.create(doctor)
             .then(data => succeed({
+                status: 201,
                 success: true,
                 data: data
             }))
             .catch(err => fail({
+                status: 500,
                 success: false,
                 error: err
             }))
