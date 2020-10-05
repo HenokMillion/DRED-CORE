@@ -114,3 +114,17 @@ module.exports.deleteRecord = (req, res, next) => {
         .catch(err => res.status(500).json(err))
 }
 
+module.exports.sendReport = (req, res, next) => {
+    const { report, patientId } = req.body
+    const valid = !!patientId && !!report
+    if (!valid) {
+        return res.status(400).json({
+            status: 400,
+            success: false,
+            error: "Bad Request"
+        })
+    }
+    patientService.sendReport(patientId, report)
+        .then(resp => res.status(200).json(resp))
+        .catch(err => res.status(500).json(err))
+}

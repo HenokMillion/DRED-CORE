@@ -15,5 +15,6 @@ module.exports = mongoose.model('Patient', new Schema({
     diagnoses: Array,
     status: Number,
     lastDiagnosed: Date,
-    address: String
+    address: String,
+    reports: Array
 }))

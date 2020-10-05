@@ -18,6 +18,8 @@ router.route('/patient/edit/:patientId')
     .post(patientController.editRecord)
 router.route('/patient/delete/:patientId')
     .post(patientController.deleteRecord)
+router.route('/patient/sendreport')
+    .post(patientController.sendReport)
 
 // appointment
 router.route('/appointment/calendar/:doctorId/:patientId')

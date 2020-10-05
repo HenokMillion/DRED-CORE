@@ -1,5 +1,6 @@
 const Patient = require('../../models/user/patient.model')
 const mongoose = require('mongoose')
+const mailUtility = require('.././../utilities/mail.utility')
 
 module.exports.editRecord = (patientId, info) => {
     return new Promise((succeed, fail) => {
@@ -107,6 +108,22 @@ module.exports.getPatient = (patientId) => {
                     success: true,
                     data: res
                 })
+            }
+        })
+    })
+}
+
+module.exports.sendReport = (id, report) => {
+    return new Promise((succeed, fail) => {
+        Patient.findByIdAndUpdate(id, {
+            $push: { reports: report }
+        }, (err, doc) => {
+            if (err) {
+                fail({ status: 500, success: false, error: "Something went wrong" })
+            } else {
+                mailUtility.sendReport(report)
+                    .then(resp => succeed({ status: 200, success: true, msg: resp }))
+                    .catch(err => fail({ status: 500, success: false, error: err }))
             }
         })
     })
