@@ -19,7 +19,7 @@ module.exports.authUser = (email = null, password = null, username = null) => {
                     canLabel: doctor.canLabel,
                     profilePicPath: doctor.profilePicPath,
                     patients: doctor.patients
-                })
+                }, 'SECRET')
                 succeed({
                     status: 200,
                     success: true,

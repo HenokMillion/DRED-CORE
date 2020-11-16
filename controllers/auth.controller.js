@@ -2,6 +2,7 @@ const authService = require('../services/auth.service')
 
 module.exports.authUser = (req, res, next) => {
     const { email, username, password } = req.body
+    console.log(req.body)
     const valid = (email || username) && password
     if (!valid) {
         return res.status(400).json({

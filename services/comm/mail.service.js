@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer')
-export const sendMail = mail => {
+module.exports.sendMail = mail => {
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,

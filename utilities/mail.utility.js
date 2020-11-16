@@ -1,10 +1,11 @@
 const ejs = require('ejs')
 const mailService = require('../services/comm/mail.service')
-const reportTemplate = require('./mail_templates/report.template')
+const fs = require('fs')
 
-export const sendReport = (data) => {
+module.exports.sendReport = (data) => {
+    var template = fs.readFileSync(path.join(__dirname, './mail_templates/report.template'), 'utf-8');
     return new Promise((succeed, fail) => {
-        const html = ejs.render(reportTemplate, {
+        const html = ejs.render(template, {
             diagnosis: data.diagnosis,
             doctor: data.doctor,
             patient: data.patient
@@ -16,11 +17,11 @@ export const sendReport = (data) => {
             body: html,
             attachements: data.attachements
         })
-        .then(resp => succeed(true))
-        .catch(err => succeed(false))
+            .then(resp => succeed(true))
+            .catch(err => succeed(false))
     })
 }
 
-export const notifyPatient = (data) => {
-    
+module.exports.notifyPatient = (data) => {
+
 }
