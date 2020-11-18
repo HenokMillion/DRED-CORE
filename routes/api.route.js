@@ -4,7 +4,7 @@ const doctorController = require('../controllers/doctor.controller');
 const appointmentController = require('../controllers/appointment.controller');
 const diagnosisController = require('../controllers/diagnosis.controller');
 const authController = require('../controllers/auth.controller');
-const upload = require('multer')({ dest: '../uploads/scans/' });
+const upload = require('multer')({ dest: 'uploads/scans/' });
 
 // patient
 router.route('/patient/:patientId').get(patientController.getPatient);

@@ -1,4 +1,5 @@
 const Patient = require('../../models/user/patient.model')
+const Diagnosis = require('../../models/diagnosis.model')
 const mongoose = require('mongoose')
 const mailUtility = require('.././../utilities/mail.utility')
 
@@ -49,9 +50,15 @@ module.exports.generateHistory = (patientId) => {
                     error: err
                 })
             } else {
-                succeed({
-                    success: true,
-                    data: res.diagnoses
+                const diagnosisIds = res.diagnoses.map(diagnosis => diagnosis.diagnosisId)
+                console.log(diagnosisIds)
+                Diagnosis.find({
+                    diagnosisId: { $in: diagnosisIds }
+                }, (err, res) => {
+                    succeed({
+                        success: true,
+                        data: res
+                    })
                 })
             }
         })
@@ -104,9 +111,17 @@ module.exports.getPatient = (patientId) => {
                 delete res.password
                 delete res._id
                 delete res.__v
-                succeed({
-                    success: true,
-                    data: res
+                
+                const diagnosisIds = res.diagnoses.map(diagnosis => diagnosis.diagnosisId)
+                console.log(diagnosisIds)
+                Diagnosis.find({
+                    diagnosisId: { $in: diagnosisIds }
+                }, (err, _res) => {
+                    res.diagnoses = _res
+                    succeed({
+                        success: true,
+                        data: res
+                    })
                 })
             }
         })

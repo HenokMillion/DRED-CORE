@@ -17,6 +17,8 @@ module.exports.saveDiagnosis = async (req, res, next) => {
   // image.mv(localImagePath)
   diagnosisService
     .diagnose(req.file.path, doctorId, patientId)
+    // .then(resp => console.log(resp))
+    // .catch(err => console.log(err))
     .then(resp => res.status(resp.status).json(resp))
     .catch(err => res.status(err.status).json(err));
 };
@@ -24,6 +26,7 @@ module.exports.saveDiagnosis = async (req, res, next) => {
 module.exports.editDiagnosis = (req, res, next) => {
   const { diagnosisId } = req.params;
   const { newDiagnosis } = req.body;
+  console.log(diagnosisId)
   const valid = diagnosisId && newDiagnosis;
   if (!valid) {
     return res.status(400).json({

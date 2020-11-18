@@ -4,6 +4,7 @@ const mobilenet = require('@tensorflow-models/mobilenet');
 const fs = require('fs');
 const tfnode = require('@tensorflow/tfjs-node');
 const Diagnosis = require('../../models/diagnosis.model');
+const Patient = require('../../models/user/patient.model');
 
 let model = null;
 module.exports.diagnose = async (imagePath, doctorId, patientId) => {
@@ -26,7 +27,7 @@ module.exports.diagnose = async (imagePath, doctorId, patientId) => {
   // const smallImg = imagePixels.resizeBilinear(imagePixels, ).toFloat().div(tf.scalar(255)).expandDims()
   const classification = await model.predict(input, { batchSize: 4 });
   // console.log(image)
-  const uploadFile = fs.writeFileSync(imagePath.split('/')[3] + '.jpg', fs.readFileSync(image), (err) => { if (err) console.log(err) });
+  const uploadFile = fs.writeFileSync(imagePath.split('/')[3] + '.jpg', fs.readFileSync(imagePath), (err) => { if (err) console.log(err) });
   console.log(uploadFile)
   // console.log(classification);
   const currentDate = new Date();
@@ -41,7 +42,13 @@ module.exports.diagnose = async (imagePath, doctorId, patientId) => {
 };
 
 function saveDiagnosis(diagnosis) {
-  return new Promise((succeed, fail) => {
+
+  return new Promise(async (succeed, fail) => {
+    await Patient.findOneAndUpdate({
+      patientId: diagnosis.patientId
+    }, {
+      $push: { diagnoses: diagnosis }
+    })
     Diagnosis.create(diagnosis)
       .then(data =>
         succeed({
@@ -61,8 +68,16 @@ function saveDiagnosis(diagnosis) {
 }
 
 module.exports.editDiagnosis = (id, diagnosis) =>
-  new Promise((succeed, fail) => {
-    Diagnosis.findByIdAndUpdate(id, diagnosis, (err, res) => {
+  new Promise(async (succeed, fail) => {
+    if (diagnosis.comment) { diagnosis.comment.timestamp = new Date().getTime() }
+    console.log(diagnosis.comment, diagnosis)
+    Diagnosis.findOneAndUpdate({
+      $or: [{
+        _id: mongoose.Types.ObjectId(id),
+      }, {
+        diagnosisId: diagnosis.diagnosisId
+      }]
+    }, diagnosis, (err, res) => {
       if (err) {
         fail({
           status: 500,
