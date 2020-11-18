@@ -47,9 +47,9 @@ const dbOptions = {
   useUnifiedTopology: true,
 };
 const connect = () => {
-  mongoose.connect('mongodb://localhost:27017/DRED', dbOptions);
+  mongoose.connect('mongodb://dredadmin:DREDC0r3@ds029801.mlab.com:29801/dred', dbOptions);
 };
-mongoose.connect('mongodb://localhost:27017/DRED', dbOptions);
+mongoose.connect('mongodb://dredadmin:DREDC0r3@ds029801.mlab.com:29801/dred', dbOptions);
 mongoose.connection.on('disconnected', () => {
   connect();
 });
