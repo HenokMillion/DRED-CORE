@@ -1,8 +1,9 @@
 .DS_STORE
 package-lock.json
-
-node_modules/
-uploads/*
-
+.env
+*.py
 *.bin
 *.jpg
+
+node_modules/
+uploads/

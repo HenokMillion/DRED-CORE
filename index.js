@@ -7,6 +7,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const _ = require('lodash');
 const logger = require('./logger');
+const dotenv = require('dotenv').config()
 
 const argv = require('./argv');
 const port = require('./port');
@@ -46,12 +47,12 @@ const dbOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
-const connect = () => {
-  mongoose.connect('mongodb://dredadmin:DREDC0r3@ds029801.mlab.com:29801/dred', dbOptions);
+const connectDb = () => {
+  mongoose.connect(process.env.MONGODB_URL, dbOptions);
 };
-mongoose.connect('mongodb://dredadmin:DREDC0r3@ds029801.mlab.com:29801/dred', dbOptions);
+connectDb()
 mongoose.connection.on('disconnected', () => {
-  connect();
+  connectDb();
 });
 mongoose.connection.on('connected', () => {
   console.log('connected to database');
