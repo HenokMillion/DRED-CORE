@@ -67,25 +67,26 @@ function saveDiagnosis(diagnosis) {
   });
 }
 
-module.exports.editDiagnosis = (id, diagnosis) =>
-  new Promise(async (succeed, fail) => {
-    if (diagnosis.comment) { diagnosis.comment.timestamp = new Date().getTime() }
-    console.log(diagnosis.comment, diagnosis)
-    Diagnosis.findOneAndUpdate({
-      $or: [{
-        _id: mongoose.Types.ObjectId(id),
-      }, {
-        diagnosisId: diagnosis.diagnosisId
-      }]
-    }, diagnosis, (err, res) => {
-      if (err) {
-        fail({
-          status: 500,
-          success: false,
-          error: err,
-        });
-      } else {
-        if (!res) {
+module.exports.editDiagnosis = (id, diagnosis) => {
+  const updatedDiagnosis = {...diagnosis}
+  delete updatedDiagnosis.comment
+  const bulk = Diagnosis.collection.initializeUnorderedBulkOp()
+  if (diagnosis.comment) {
+    diagnosis.comment.timestamp = new Date().getTime()
+    bulk.find({
+      _id: mongoose.Types.ObjectId(id),
+    })
+      .update({
+        $push: { comment: diagnosis.comment }
+      })
+  }
+  bulk.find({
+    _id: mongoose.Types.ObjectId(id)
+  }).update({ '$set': updatedDiagnosis });
+  return new Promise(async (succeed, fail) => {
+    bulk.execute()
+      .then(data => {
+        if (!data) {
           return fail({
             status: 500,
             success: false,
@@ -95,11 +96,19 @@ module.exports.editDiagnosis = (id, diagnosis) =>
         succeed({
           status: 200,
           success: true,
-          data: res,
+          data: data,
         });
-      }
-    });
+      })
+      .catch(err => {
+        console.log(err)
+        fail({
+          status: 500,
+          success: false,
+          error: err,
+        });
+      })
   });
+}
 
 module.exports.deleteDiagnosis = id =>
   new Promise((succeed, fail) => {

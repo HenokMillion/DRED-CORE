@@ -108,21 +108,28 @@ module.exports.getPatient = (patientId) => {
                     error: err
                 })
             } else {
-                delete res.password
-                delete res._id
-                delete res.__v
-                
-                const diagnosisIds = res.diagnoses.map(diagnosis => diagnosis.diagnosisId)
-                console.log(diagnosisIds)
-                Diagnosis.find({
-                    diagnosisId: { $in: diagnosisIds }
-                }, (err, _res) => {
-                    res.diagnoses = _res
-                    succeed({
-                        success: true,
-                        data: res
+                if (res) {
+                    delete res.password
+                    delete res._id
+                    delete res.__v
+
+                    const diagnosisIds = res.diagnoses.map(diagnosis => diagnosis.diagnosisId)
+                    console.log(diagnosisIds)
+                    Diagnosis.find({
+                        diagnosisId: { $in: diagnosisIds }
+                    }, (err, _res) => {
+                        res.diagnoses = _res
+                        succeed({
+                            success: true,
+                            data: res
+                        })
                     })
-                })
+                } else {
+                    fail({
+                        success: false,
+                        error: '500'
+                    })
+                }
             }
         })
     })
