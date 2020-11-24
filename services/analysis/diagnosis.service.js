@@ -25,7 +25,7 @@ module.exports.diagnose = async (imagePath, doctorId, patientId) => {
   const input = tf.zeros([1, 224, 224, 3]);
   input[0] = imagePixels;
   // const smallImg = imagePixels.resizeBilinear(imagePixels, ).toFloat().div(tf.scalar(255)).expandDims()
-  const classification = await model.predict(input, { batchSize: 4 });
+  const classification = await model.predict(input, { batchSize: 1 });
   // console.log(image)
   const uploadFile = fs.writeFileSync(imagePath.split('/')[3] + '.jpg', fs.readFileSync(imagePath), (err) => { if (err) console.log(err) });
   console.log(uploadFile)
@@ -42,7 +42,6 @@ module.exports.diagnose = async (imagePath, doctorId, patientId) => {
 };
 
 function saveDiagnosis(diagnosis) {
-
   return new Promise(async (succeed, fail) => {
     await Patient.findOneAndUpdate({
       patientId: diagnosis.patientId

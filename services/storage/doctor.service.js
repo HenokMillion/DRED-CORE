@@ -1,4 +1,5 @@
 const Doctor = require('../../models/user/doctor.model')
+const Patient = require('../../models/user/patient.model')
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 

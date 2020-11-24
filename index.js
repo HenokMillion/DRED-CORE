@@ -5,13 +5,13 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
-const _ = require('lodash');
 const logger = require('./logger');
 const dotenv = require('dotenv').config()
 
 const argv = require('./argv');
 const port = require('./port');
 const setup = require('./middlewares/frontendMiddleware');
+const authMiddleware = require('./middlewares/auth.middleware')
 const routes = require('./routes/index.route');
 const isDev = process.env.NODE_ENV !== 'production';
 const ngrok =
@@ -83,7 +83,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
+// to be changed to public
+app.use('/static', authMiddleware)
 app.use('/api', routes);
+app.use('/static', express.static('uploads'))
 app.all('**', (req, res, next) => {
   res.status(404).json({ status: 404, success: false, error: 'Not found' });
 });

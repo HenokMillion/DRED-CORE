@@ -114,7 +114,6 @@ module.exports.getPatient = (patientId) => {
                     delete res.__v
 
                     const diagnosisIds = res.diagnoses.map(diagnosis => diagnosis.diagnosisId)
-                    console.log(diagnosisIds)
                     Diagnosis.find({
                         diagnosisId: { $in: diagnosisIds }
                     }, (err, _res) => {
@@ -146,6 +145,19 @@ module.exports.sendReport = (id, report) => {
                 mailUtility.sendReport(report)
                     .then(resp => succeed({ status: 200, success: true, msg: resp }))
                     .catch(err => fail({ status: 500, success: false, error: err }))
+            }
+        })
+    })
+}
+
+module.exports.listPatients = () => {
+    return new Promise((succeed, fail) => {
+        Patient.find({}, (err, data) => {
+            if (err) {
+                console.log('ERROR: ', err)
+                fail({ status: 500, success: false, error: "Something went wrong" })
+            } else {
+                succeed({ status: 200, success: true, data: data })
             }
         })
     })

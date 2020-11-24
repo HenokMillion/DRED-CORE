@@ -20,13 +20,13 @@ module.exports.registerPatient = (req, res, next) => {
         firstName,
         lastName,
         birthDate,
-        gender,
+        sex,
         profilePicPath,
         email,
         phone,
         fileNumber,
         address } = req.body
-    const valid = !!patientId && !!firstName && !!lastName && !!birthDate && !!gender &&
+    const valid = !!patientId && !!firstName && !!lastName && !!birthDate && !!sex &&
             !!phone && !!fileNumber && !!profilePicPath && !!email && !!address
     if (!valid) {
         return res.status(400).json({
@@ -40,7 +40,7 @@ module.exports.registerPatient = (req, res, next) => {
         'firstName': firstName.trim(),
         'lastName': lastName.trim(),
         'birthDate': birthDate,
-        'gender': gender,
+        'sex': sex,
         'profilePicPath': profilePicPath,
         'email': email,
         'phone': phone.trim(),
@@ -127,4 +127,10 @@ module.exports.sendReport = (req, res, next) => {
     patientService.sendReport(patientId, report)
         .then(resp => res.status(200).json(resp))
         .catch(err => res.status(500).json(err))
+}
+
+module.exports.listPatients = (req, res, next) => {
+    patientService.listPatients()
+        .then(resp => res.status(resp.status).json(resp))
+        .catch(err => res.status(err.status).json(err))
 }

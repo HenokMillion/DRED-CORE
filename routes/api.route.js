@@ -7,6 +7,7 @@ const authController = require('../controllers/auth.controller');
 const upload = require('multer')({ dest: 'uploads/scans/' });
 
 // patient
+router.route('/patient/all').get(patientController.listPatients);
 router.route('/patient/:patientId').get(patientController.getPatient);
 router.route('/patient/register').post(patientController.registerPatient);
 router
