@@ -10,6 +10,7 @@ module.exports.authUser = (email = null, password = null, username = null) => {
             const isPassworCorrect = bcrypt.compareSync(password, doctor.password)
             if (isPassworCorrect) {
                 const token = jwt.sign({
+                    id: doctor._id,
                     email: email,
                     firstName: doctor.firstName,
                     lastName: doctor.lastName,

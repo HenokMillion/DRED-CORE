@@ -8,7 +8,6 @@ const upload = require('multer')({ dest: 'uploads/scans/' });
 
 // patient
 router.route('/patient/all').get(patientController.listPatients);
-router.route('/patient/:patientId').get(patientController.getPatient);
 router.route('/patient/register').post(patientController.registerPatient);
 router
   .route('/patient/history/:patientId')
@@ -19,6 +18,8 @@ router
 router.route('/patient/edit/:patientId').post(patientController.editRecord);
 router.route('/patient/delete/:patientId').post(patientController.deleteRecord);
 router.route('/patient/sendreport').post(patientController.sendReport);
+router.route('/patient/search/:partialName').get(patientController.searchPatients);
+router.route('/patient/:patientId').get(patientController.getPatient);
 
 // appointment
 router
@@ -47,7 +48,7 @@ router
 router.route('/doctor/register').post(doctorController.registerDoctor);
 router.route('/doctor/changePassword').put(doctorController.changePassword);
 router.route('/doctor/edit/:doctorId').put(doctorController.editInfo);
-
+router.route('/doctor/:doctorId/appointments').get(doctorController.listAppointments)
 // auth
 router.route('/auth').post(authController.authUser);
 

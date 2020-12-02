@@ -16,8 +16,9 @@ module.exports.showCalendar = (req, res, next) => {
 }
 
 module.exports.createAppointment = (req, res, next) => {
-    const { patientId, doctorId, appointmentDate } = req.body
+    let { patientId, doctorId, appointmentDate } = req.body
     const valid = patientId && doctorId && appointmentDate
+    appointmentDate = new Date(appointmentDate).setHours(new Date().getHours())
     if (!valid) {
         return res.status(400).json({
             status: 400,

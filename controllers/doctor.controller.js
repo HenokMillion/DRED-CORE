@@ -45,3 +45,17 @@ module.exports.editInfo = (req, res, next) => {
         .then(resp => res.status(resp.status).json(resp))
         .catch(err => res.status(err.status).json(err))
 }
+
+module.exports.listAppointments = (req, res, next) => {
+    const { doctorId } = req.params
+    if (!doctorId) {
+        return res.status(400).json({
+            status: 400,
+            success: false,
+            error: "Bad Request"
+        })
+    }
+    return doctorService.listAppointments(doctorId)
+        .then(resp => res.status(resp.status).json(resp))
+        .catch(err => res.status(err.status).json(err))
+}

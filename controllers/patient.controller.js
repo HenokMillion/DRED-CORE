@@ -134,3 +134,18 @@ module.exports.listPatients = (req, res, next) => {
         .then(resp => res.status(resp.status).json(resp))
         .catch(err => res.status(err.status).json(err))
 }
+
+module.exports.searchPatients = (req, res, next) => {
+    const { partialName } = req.params
+    console.log(partialName)
+    if (!partialName) {
+        return res.status(400).json({
+            status: 400,
+            success: false,
+            error: "Bad Request"
+        })
+    }
+    patientService.searchPatients(partialName)
+        .then(resp => res.status(resp.status).json(resp))
+        .catch(err => res.status(err.status).json(err))
+}

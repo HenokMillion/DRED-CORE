@@ -162,3 +162,23 @@ module.exports.listPatients = () => {
         })
     })
 }
+
+module.exports.searchPatients = partialName => {
+    return new Promise((succeed, fail) => {
+        Patient.createIndexes()
+        Patient.find({
+            $or: [{
+                firstName: new RegExp(partialName, 'i')
+            }, {
+                lastName: new RegExp(partialName, 'i')
+            }]
+        }, (err, data) => {
+            if (err) {
+                console.log('ERROR: ', err)
+                fail({ status: 500, success: false, error: "Something went wrong" })
+            } else {
+                succeed({ status: 200, success: true, data: data })
+            }
+        })
+    })
+}
