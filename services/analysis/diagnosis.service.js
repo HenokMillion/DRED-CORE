@@ -5,6 +5,7 @@ const fs = require('fs');
 const tfnode = require('@tensorflow/tfjs-node');
 const Diagnosis = require('../../models/diagnosis.model');
 const Patient = require('../../models/user/patient.model');
+const { fail } = require('assert');
 
 let model = null;
 module.exports.diagnose = async (imagePath, doctorId, patientId) => {
@@ -67,6 +68,13 @@ function saveDiagnosis(diagnosis) {
 }
 
 module.exports.editDiagnosis = (id, diagnosis) => {
+  if (!mongoose.isValidObjectId(id)) {
+    return new Promise((success, fail) => fail({
+      status: 404,
+      success: false,
+      error: "Not found",
+    }))
+  }
   const updatedDiagnosis = {...diagnosis}
   delete updatedDiagnosis.comment
   const bulk = Diagnosis.collection.initializeUnorderedBulkOp()
@@ -95,7 +103,7 @@ module.exports.editDiagnosis = (id, diagnosis) => {
         succeed({
           status: 200,
           success: true,
-          data: data,
+          data: 'diagnosis updated successfully',
         });
       })
       .catch(err => {

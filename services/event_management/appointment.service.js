@@ -51,8 +51,7 @@ module.exports.editAppointment = (appointmentId, newAppointment) => {
             } else {
                 succeed({
                     status: 200,
-                    success: true,
-                    data: res
+                    success: true
                 })
             }
         })

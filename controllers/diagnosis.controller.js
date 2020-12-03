@@ -4,7 +4,7 @@ const diagnosisService = require('../services/analysis/diagnosis.service');
 
 module.exports.saveDiagnosis = async (req, res, next) => {
   const { doctorId, patientId } = req.body;
-  const valid = doctorId && patientId;
+  const valid = doctorId && patientId && req.file;
   if (!valid) {
     return res.status(400).json({
       status: 400,
