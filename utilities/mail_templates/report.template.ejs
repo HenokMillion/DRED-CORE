@@ -2,22 +2,32 @@
     Date: <%= diagnosis.diagnosis_date %>
 </p>
 <p>
-    Patient: <%= patient.firstName %> <%= patient.lastName %>
+    Patient: <%= patient.firstName %>
+        <%= patient.lastName %>
 </p>
 <p>
-    Doctor: <%= doctor.firstName %> <%= doctor.lastName %>
+    Doctor: <%= doctor.firstName %>
+        <%= doctor.lastName %>
 </p>
 <hr>
 <p>
-    <span style="text-decoration: underline">Diagnosis</span>
+    <b style="text-decoration: underline">System Diagnosis</b>
     <br>
     Severity: <%= diagnosis.severity %>
+        <br>
+</p>
+<p>
+    <b style="text-decoration: underline">Doctor's Comments</b>
     <br>
-    <img src="https://dredcore.herokuapp.com/<%= diagnosis.imagePath %>" alt="">
+    Severity: <%= diagnosis.comment[0].severity %>
+        <br>
+        Comment: <%= diagnosis.comment[0].comment %>
+            <img src="https://dredcore.herokuapp.com/<%= diagnosis.imagePath %>" alt="">
 </p>
 <p>
-    Doctors's comments: <%= diagnosis.comment %>
-</p>
-<p>
-    
+    <br>
+    <br>
+    <hr>
+    <span>Diabetic Retinopathy Early Detection</span>
+    <hr>
 </p>

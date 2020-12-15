@@ -51,27 +51,13 @@ function saveDiagnosis(diagnosis) {
     }, {
       $push: { diagnoses: diagnosis }
     })
-    const doctor = await Doctor.findById(diagnosis.doctorId)
-    const patient = await patientService.getPatient(diagnosis.patientId)
     Diagnosis.create(diagnosis)
       .then(async data => {
-        mailUtil.sendReport({
-          diagnosis: data,
-          doctor: doctor,
-          patient: patient.data,
-          attachement: fs.readFileSync(diagnosis.imagePath)
+        succeed({
+          status: 200,
+          success: true,
+          data,
         })
-          .then(_data => {
-            console.log('_DATA: ', _data)
-          })
-          .catch(_err => console.error('_ERR: ', _err))
-          .finally(() => {
-            succeed({
-              status: 200,
-              success: true,
-              data,
-            })
-          })
       })
       .catch(err =>
         fail({
@@ -108,7 +94,7 @@ module.exports.editDiagnosis = (id, diagnosis) => {
   }).update({ '$set': updatedDiagnosis });
   return new Promise(async (succeed, fail) => {
     bulk.execute()
-      .then(data => {
+      .then(async data => {
         if (!data) {
           return fail({
             status: 500,
@@ -116,6 +102,15 @@ module.exports.editDiagnosis = (id, diagnosis) => {
             error: 'diagnosis not found',
           });
         }
+        const _diagnosis = await Diagnosis.findById(id)
+        const doctor = await Doctor.findById(_diagnosis.doctorId)
+        const patient = await patientService.getPatient(_diagnosis.patientId)
+        await mailUtil.sendReport({
+          diagnosis: _diagnosis,
+          doctor: doctor,
+          patient: patient.data,
+          attachement: fs.readFileSync(_diagnosis.imagePath)
+        })
         succeed({
           status: 200,
           success: true,
