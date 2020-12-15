@@ -27,7 +27,7 @@ module.exports.registerPatient = (req, res, next) => {
         fileNumber,
         address } = req.body
     const valid = !!patientId && !!firstName && !!lastName && !!birthDate && !!sex &&
-            !!phone && !!fileNumber && !!profilePicPath && !!email && !!address
+            !!phone && !!fileNumber && !!email && !!address
     if (!valid) {
         return res.status(400).json({
             status: 400,
