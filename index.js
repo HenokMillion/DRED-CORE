@@ -46,7 +46,7 @@ const dbOptions = {
   connectTimeoutMS: 9000,
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  connectTimeoutMS: 10000
+  connectTimeoutMS: 60000
 };
 const connectDb = () => {
   mongoose.connect(process.env.MONGODB_URL, dbOptions);
