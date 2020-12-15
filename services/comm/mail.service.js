@@ -4,8 +4,8 @@ module.exports.sendMail = mail => {
         host: 'smtp.gmail.com',
         port: 465,
         auth: {
-            user: '',
-            pass: ''
+            user: 'henokmillionmekuria@gmail.com',
+            pass: 'D@n781229@n781229'
         }
     });
     return transporter.sendMail(mail)

@@ -6,6 +6,9 @@ const tfnode = require('@tensorflow/tfjs-node');
 const Diagnosis = require('../../models/diagnosis.model');
 const Patient = require('../../models/user/patient.model');
 const { fail } = require('assert');
+const mailUtil = require('../../utilities/mail.utility')
+const Doctor = require('../../models/user/doctor.model')
+const patientService = require('../storage/patient.service')
 
 let model = null;
 module.exports.diagnose = async (imagePath, doctorId, patientId) => {
@@ -28,9 +31,7 @@ module.exports.diagnose = async (imagePath, doctorId, patientId) => {
   // const smallImg = imagePixels.resizeBilinear(imagePixels, ).toFloat().div(tf.scalar(255)).expandDims()
   console.log('pre-classification: ', input)
   const classification = await model.predict(input, { batchSize: 1 });
-  console.log('CLASSIFICATION: ', classification)
   const uploadFile = fs.writeFileSync(imagePath.split('/')[3] + '.jpg', fs.readFileSync(imagePath), (err) => { if (err) console.log(err) });
-  console.log(uploadFile)
   // console.log(classification);
   const currentDate = new Date();
   return saveDiagnosis({
@@ -50,14 +51,28 @@ function saveDiagnosis(diagnosis) {
     }, {
       $push: { diagnoses: diagnosis }
     })
+    const doctor = await Doctor.findById(diagnosis.doctorId)
+    const patient = await patientService.getPatient(diagnosis.patientId)
     Diagnosis.create(diagnosis)
-      .then(data =>
-        succeed({
-          status: 200,
-          success: true,
-          data,
-        }),
-      )
+      .then(async data => {
+        mailUtil.sendReport({
+          diagnosis: data,
+          doctor: doctor,
+          patient: patient.data,
+          attachement: fs.readFileSync(diagnosis.imagePath)
+        })
+          .then(_data => {
+            console.log('_DATA: ', _data)
+          })
+          .catch(_err => console.error('_ERR: ', _err))
+          .finally(() => {
+            succeed({
+              status: 200,
+              success: true,
+              data,
+            })
+          })
+      })
       .catch(err =>
         fail({
           status: 500,
@@ -76,7 +91,7 @@ module.exports.editDiagnosis = (id, diagnosis) => {
       error: "Not found",
     }))
   }
-  const updatedDiagnosis = {...diagnosis}
+  const updatedDiagnosis = { ...diagnosis }
   delete updatedDiagnosis.comment
   const bulk = Diagnosis.collection.initializeUnorderedBulkOp()
   if (diagnosis.comment) {

@@ -7,12 +7,13 @@
 <p>
     Doctor: <%= doctor.firstName %> <%= doctor.lastName %>
 </p>
+<hr>
 <p>
-    Diagnosis
-    <hr><br>
+    <span style="text-decoration: underline">Diagnosis</span>
+    <br>
     Severity: <%= diagnosis.severity %>
     <br>
-    <img src="<%= diagnosis.imagePath %>" alt="">
+    <img src="https://dredcore.herokuapp.com/<%= diagnosis.imagePath %>" alt="">
 </p>
 <p>
     Doctors's comments: <%= diagnosis.comment %>

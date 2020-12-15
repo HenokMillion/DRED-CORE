@@ -87,7 +87,7 @@ app.use(morgan('dev'));
 // to be changed to public
 // app.use('/static', authMiddleware)
 app.use('/api', routes);
-app.use('/scans', express.static('uploads/scans'))
+app.use('/uploads', express.static('uploads'))
 app.all('**', (req, res, next) => {
   res.status(404).json({ status: 404, success: false, error: 'Not found' });
 });
