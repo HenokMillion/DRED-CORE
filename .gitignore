@@ -1,6 +1,5 @@
 .DS_STORE
 package-lock.json
-.env
 *.py
 *.jpg
 *.hdf5
