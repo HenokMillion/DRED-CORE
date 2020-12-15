@@ -26,8 +26,9 @@ module.exports.diagnose = async (imagePath, doctorId, patientId) => {
   const input = tf.zeros([1, 224, 224, 3]);
   input[0] = imagePixels;
   // const smallImg = imagePixels.resizeBilinear(imagePixels, ).toFloat().div(tf.scalar(255)).expandDims()
+  console.log('pre-classification: ', input)
   const classification = await model.predict(input, { batchSize: 1 });
-  // console.log(image)
+  console.log('CLASSIFICATION: ', classification)
   const uploadFile = fs.writeFileSync(imagePath.split('/')[3] + '.jpg', fs.readFileSync(imagePath), (err) => { if (err) console.log(err) });
   console.log(uploadFile)
   // console.log(classification);

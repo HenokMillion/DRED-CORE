@@ -4,6 +4,9 @@ package-lock.json
 *.py
 *.bin
 *.jpg
+*.hdf5
+*.bin
+*.h5
 
 node_modules/
 uploads/
