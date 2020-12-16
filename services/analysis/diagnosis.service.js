@@ -37,7 +37,7 @@ module.exports.diagnose = async (imagePath, doctorId, patientId) => {
   return saveDiagnosis({
     diagnosisId: currentDate.getTime(),
     imagePath,
-    severity: parseInt(classification.scopeId)%200,
+    severity: parseInt(classification.scopeId)%5,
     doctorId,
     patientId,
     diagnosis_date: currentDate,
